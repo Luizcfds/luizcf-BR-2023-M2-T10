@@ -1,9 +1,9 @@
 import pygame
 import random
 
+from dino_runner.utils.constants import HAMMER_TYPE, SHIELD_TYPE, BOOTS_TYPE, DEFAULT_TYPE
 from dino_runner.components.obstacles.cactus import Cactus
 from dino_runner.components.obstacles.bird import Bird
-from dino_runner.components.power_ups.power_up_manager import PowerUpManager
 
 
 class ObstacleManager:
@@ -21,13 +21,20 @@ class ObstacleManager:
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
-                if not game.player.has_power_up:
+                if not game.player.has_power_up or game.player.type == BOOTS_TYPE:
                     pygame.time.delay(500)
                     game.playing = False
                     game.death_count += 1
+                    game.player.has_power_up = False
+                    game.player.type = DEFAULT_TYPE                               
                     break
                 else:
-                    self.obstacles.remove(obstacle)
+                    if game.player.type == HAMMER_TYPE:
+                        self.obstacles.remove(obstacle)
+                    elif game.player.type == SHIELD_TYPE:
+                        continue
+                    else:
+                        self.obstacles.remove(obstacle)
                                    
 
     def draw(self, screen):
@@ -36,3 +43,4 @@ class ObstacleManager:
 
     def reset_obstacles(self):
         self.obstacles = []
+        

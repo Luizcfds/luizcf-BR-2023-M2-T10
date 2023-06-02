@@ -25,6 +25,7 @@ class Game:
         self.player = Dinosaur()
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
+        
 
     def execute(self):
         self.running = True
@@ -62,7 +63,7 @@ class Game:
     def update_score(self):
         self.score += 1
         if self.score % 100 == 0:
-            self.game_speed += 5
+            self.game_speed += 1
 
     def draw(self):
         self.clock.tick(FPS)
